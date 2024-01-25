@@ -112,6 +112,7 @@ func TriggerCorePostExtract(appName string, sourceWorkDir string) error {
 	if result.ExitCode != 0 {
 		return fmt.Errorf("Invalid Procfile: %s", result.StderrContents())
 	}
+
 	return nil
 }
 

@@ -142,11 +142,15 @@ func CopyFromImage(appName string, image string, source string, destination stri
 		Command: "tail",
 		Args:    []string{"-c1", destination},
 	})
-	if err != nil || result.ExitCode != 0 {
-		return fmt.Errorf("Unable to append trailing newline to copied file: %v", result.Stderr)
+	if err != nil {
+		return fmt.Errorf("Unable to append trailing newline to copied file: %v", err)
 	}
 
-	if result.Stdout != "" {
+	if result.ExitCode != 0 {
+		return fmt.Errorf("Unable to append trailing newline to copied file: %v", result.StdoutContents())
+	}
+
+	if result.StdoutContents() != "" {
 		f, err := os.OpenFile(destination, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			return err
