@@ -218,8 +218,14 @@ func executeScript(appName string, image string, imageTag string, phase string) 
 	}
 
 	var dockerArgs []string
-	if b, err := common.PlugnTriggerSetup("docker-args-deploy", []string{appName, imageTag}...).SetInput("").Output(); err == nil {
-		words, err := shellquote.Split(strings.TrimSpace(string(b[:])))
+	result, err := common.CallPlugnTrigger(common.PlugnTriggerInput{
+		Trigger:       "docker-args-deploy",
+		Args:          []string{appName, imageTag},
+		Stdin:         strings.NewReader(""),
+		CaptureOutput: true,
+	})
+	if err == nil && result.ExitCode == 0 {
+		words, err := shellquote.Split(result.StdoutContents())
 		if err != nil {
 			return err
 		}
@@ -227,8 +233,14 @@ func executeScript(appName string, image string, imageTag string, phase string) 
 		dockerArgs = append(dockerArgs, words...)
 	}
 
-	if b, err := common.PlugnTriggerSetup("docker-args-process-deploy", []string{appName, imageSourceType, imageTag}...).SetInput("").Output(); err == nil {
-		words, err := shellquote.Split(strings.TrimSpace(string(b[:])))
+	result, err = common.CallPlugnTrigger(common.PlugnTriggerInput{
+		Trigger:       "docker-args-process-deploy",
+		Args:          []string{appName, imageSourceType, imageTag},
+		Stdin:         strings.NewReader(""),
+		CaptureOutput: true,
+	})
+	if err == nil && result.ExitCode == 0 {
+		words, err := shellquote.Split(result.StdoutContents())
 		if err != nil {
 			return err
 		}
@@ -331,7 +343,7 @@ func executeScript(appName string, image string, imageTag string, phase string) 
 		fmt.Sprintf("LABEL com.dokku.%s-phase=true", phase),
 	}...)
 	commitArgs = append(commitArgs, containerID, image)
-	result, err := common.CallExecCommand(common.ExecCommandInput{
+	result, err = common.CallExecCommand(common.ExecCommandInput{
 		Command:      common.DockerBin(),
 		Args:         commitArgs,
 		StreamStderr: true,
