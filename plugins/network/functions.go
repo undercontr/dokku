@@ -71,10 +71,6 @@ func isContainerInNetwork(containerID string, networkName string) bool {
 		common.LogVerboseQuiet(fmt.Sprintf("Error checking container networking status: %v", result.StderrContents()))
 		return false
 	}
-	if result.ExitCode != 0 {
-		common.LogVerboseQuiet(fmt.Sprintf("Error checking container networking status:%v", result.StderrContents()))
-		return false
-	}
 
 	for _, line := range strings.Split(result.StdoutContents(), "\n") {
 		network := strings.TrimSpace(line)
