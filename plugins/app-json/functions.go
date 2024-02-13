@@ -219,10 +219,9 @@ func executeScript(appName string, image string, imageTag string, phase string) 
 
 	var dockerArgs []string
 	result, err := common.CallPlugnTrigger(common.PlugnTriggerInput{
-		Trigger:       "docker-args-deploy",
-		Args:          []string{appName, imageTag},
-		Stdin:         strings.NewReader(""),
-		CaptureOutput: true,
+		Trigger: "docker-args-deploy",
+		Args:    []string{appName, imageTag},
+		Stdin:   strings.NewReader(""),
 	})
 	if err == nil && result.ExitCode == 0 {
 		words, err := shellquote.Split(result.StdoutContents())
@@ -234,10 +233,9 @@ func executeScript(appName string, image string, imageTag string, phase string) 
 	}
 
 	result, err = common.CallPlugnTrigger(common.PlugnTriggerInput{
-		Trigger:       "docker-args-process-deploy",
-		Args:          []string{appName, imageSourceType, imageTag},
-		Stdin:         strings.NewReader(""),
-		CaptureOutput: true,
+		Trigger: "docker-args-process-deploy",
+		Args:    []string{appName, imageSourceType, imageTag},
+		Stdin:   strings.NewReader(""),
 	})
 	if err == nil && result.ExitCode == 0 {
 		words, err := shellquote.Split(result.StdoutContents())
