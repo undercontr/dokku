@@ -147,8 +147,11 @@ func getDetectedPortMaps(appName string) []PortMap {
 
 func getGlobalProxyPort() int {
 	port := 0
-	b, _ := common.PlugnTriggerOutput("config-get-global", []string{"DOKKU_PROXY_PORT"}...)
-	if intVar, err := strconv.Atoi(strings.TrimSpace(string(b[:]))); err == nil {
+	results, _ := common.CallPlugnTrigger(common.PlugnTriggerInput{
+		Trigger: "config-get-global",
+		Args:    []string{"DOKKU_PROXY_PORT"},
+	})
+	if intVar, err := strconv.Atoi(results.StdoutContents()); err == nil {
 		port = intVar
 	}
 
@@ -157,8 +160,11 @@ func getGlobalProxyPort() int {
 
 func getGlobalProxySSLPort() int {
 	port := 0
-	b, _ := common.PlugnTriggerOutput("config-get-global", []string{"DOKKU_PROXY_SSL_PORT"}...)
-	if intVar, err := strconv.Atoi(strings.TrimSpace(string(b[:]))); err == nil {
+	results, _ := common.CallPlugnTrigger(common.PlugnTriggerInput{
+		Trigger: "config-get-global",
+		Args:    []string{"DOKKU_PROXY_SSL_PORT"},
+	})
+	if intVar, err := strconv.Atoi(results.StdoutContents()); err == nil {
 		port = intVar
 	}
 
@@ -177,8 +183,11 @@ func getPortMaps(appName string) []PortMap {
 
 func getProxyPort(appName string) int {
 	port := 0
-	b, _ := common.PlugnTriggerOutput("config-get", []string{appName, "DOKKU_PROXY_PORT"}...)
-	if intVar, err := strconv.Atoi(strings.TrimSpace(string(b[:]))); err == nil {
+	results, _ := common.CallPlugnTrigger(common.PlugnTriggerInput{
+		Trigger: "config-get",
+		Args:    []string{appName, "DOKKU_PROXY_PORT"},
+	})
+	if intVar, err := strconv.Atoi(results.StdoutContents()); err == nil {
 		port = intVar
 	}
 
@@ -187,8 +196,11 @@ func getProxyPort(appName string) int {
 
 func getProxySSLPort(appName string) int {
 	port := 0
-	b, _ := common.PlugnTriggerOutput("config-get", []string{appName, "DOKKU_PROXY_SSL_PORT"}...)
-	if intVar, err := strconv.Atoi(strings.TrimSpace(string(b[:]))); err == nil {
+	results, _ := common.CallPlugnTrigger(common.PlugnTriggerInput{
+		Trigger: "config-get",
+		Args:    []string{appName, "DOKKU_PROXY_SSL_PORT"},
+	})
+	if intVar, err := strconv.Atoi(results.StdoutContents()); err == nil {
 		port = intVar
 	}
 
