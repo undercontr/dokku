@@ -29,6 +29,7 @@ require (
 	github.com/ryanuber/columnize v2.1.2+incompatible // indirect
 	golang.org/x/crypto v0.20.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
+	k8s.io/utils v0.0.0-20240102154912-e7106e64919e // indirect
 	mvdan.cc/sh/v3 v3.8.0 // indirect
 )
 
