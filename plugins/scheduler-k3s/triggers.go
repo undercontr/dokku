@@ -343,7 +343,12 @@ func TriggerSchedulerDeploy(scheduler string, appName string, imageTag string) e
 			return fmt.Errorf("Error getting process annotations: %w", err)
 		}
 
-		autoscaling, err := getAutoscaling(appName, processType, int(processCount))
+		autoscaling, err := getAutoscaling(GetAutoscalingInput{
+			AppName:     appName,
+			ProcessType: processType,
+			Replicas:    int(processCount),
+			KedaValues:  kedaValues,
+		})
 		if err != nil {
 			return fmt.Errorf("Error getting autoscaling: %w", err)
 		}
