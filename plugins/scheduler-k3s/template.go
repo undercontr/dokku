@@ -37,6 +37,7 @@ type GlobalValues struct {
 	AppName      string             `yaml:"app_name"`
 	DeploymentID string             `yaml:"deploment_id"`
 	Image        GlobalImage        `yaml:"image"`
+	Keda         GlobalKedaValues   `yaml:"keda"`
 	Namespace    string             `yaml:"namespace"`
 	Network      GlobalNetwork      `yaml:"network"`
 	Secrets      map[string]string  `yaml:"secrets,omitempty"`
@@ -53,6 +54,21 @@ type GlobalImage struct {
 type GlobalNetwork struct {
 	IngressClass string `yaml:"ingress_class"`
 	PrimaryPort  int32  `yaml:"primary_port"`
+}
+
+// GlobalKedaValues contains the global keda configuration
+type GlobalKedaValues struct {
+	// Authentications is a map of authentication objects to use for keda
+	Authentications map[string]KedaAuthentication `yaml:"authentications"`
+}
+
+// KedaAuthentication contains the authentication configuration for keda
+type KedaAuthentication struct {
+	// Type is the type of authentication to use
+	Type string `yaml:"type"`
+
+	// Secrets is a map of secrets to use for authentication
+	Secrets map[string]string `yaml:"secrets"`
 }
 
 type ProcessValues struct {
@@ -118,6 +134,15 @@ type ProcessAutoscalingTrigger struct {
 
 	// Metadata is a map of key-value pairs that can be used to store arbitrary trigger data
 	Metadata map[string]string `yaml:"metadata,omitempty"`
+
+	// AuthenticationRef is a reference to an authentication object
+	AuthenticationRef *ProcessAutoscalingTriggerAuthenticationRef `yaml:"authenticationRef,omitempty"`
+}
+
+// ProcessAutoscalingTriggerAuthenticationRef is a reference to an authentication object
+type ProcessAutoscalingTriggerAuthenticationRef struct {
+	// Name is the name of the authentication object
+	Name string `yaml:"name"`
 }
 
 type ProcessHealthchecks struct {
